@@ -2,18 +2,24 @@ import requests
 from getdominantcolor import get_major_color
 import urllib.request
 
+TOKEN_FILENAME = '../spotify_token.txt' # IMPORTANT! Replace this with where your Spotify token is stored
 
+with open(TOKEN_FILENAME) as f: 
+    lines = f.readlines()
+token = lines[0]
 
 currplayingurl = 'https://api.spotify.com/v1/me/player/currently-playing?market=ES'
 headers = {
-    'Authorization': 'Bearer BQDLLHVAy9p2SZ1DyMsv23XhQHRKgGuuPms_tzB_1TpmuKvkxzblnj_uZ40C2V9nAYPVfyJI91QjvM2xYGFxUTGms4vljlqWjxWaKA77SLx7f2sZepJwT-8nUUbk8fHNJLNAvBcRxXdh5PMJPA',
+    'Authorization': 'Bearer ' + token,
     'Accept': 'application/json',
     'Content-Type': 'application/json'
 }
 
 def current_playing_color():
-
-    r = requests.get(currplayingurl, headers=headers).json()
+    r = requests.get(currplayingurl, headers=headers)
+    print("Spotify Response:",r)
+    
+    r = r.json()
     # print(r)
 
     coverarturl = r['item']['album']['images'][1]['url']
